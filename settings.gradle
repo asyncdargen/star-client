@@ -1,0 +1,17 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
+    }
+    dependencies {
+        classpath files('C:\\Users\\dargen\\IdeaProjects\\radon-gradle-plugin\\build\\libs\\radon-gradle-plugin-1.0.0.jar')
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+rootProject.name = 'star-client'
+
+include 'api', 'test-client-mod'
+

@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "package": "ru.starfarm.client.mixins",
+  "mixins": [
+    "ScaledResolutionMixin",
+    "NetHandlerPlayClientMixin",
+    "SPacketCustomPayloadMixin",
+    "SoundManagerMixin",
+    "NetworkPlayerInfoMixin",
+    "font.FontRendererMixin",
+    "font.TextComponentMixin",
+    "SoundHandlerAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

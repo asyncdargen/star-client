@@ -1,0 +1,63 @@
+libraries:
+  - ".local-libs/modlauncher-8.1.3.jar"
+  - ".local-libs/fernflower.jar"
+
+string_encryption:
+  check_context: false
+
+  pool_strings: true
+
+renamer:
+  repackage_name: ""
+
+hide_code:
+  hide_classes: false
+  hide_fields: true
+  hide_methods: true
+
+#flow_obfuscation:
+#  replace_goto: true
+#  fake_catch_blocks: true
+#  insert_bogus_jumps: true
+
+number_obfuscation:
+  double_tampering: true
+  int_tampering: true
+  float_tampering: true
+  long_tampering: true
+  bitwise_operations: true
+
+optimizer:
+  inline_goto_goto: true
+  inline_goto_return: true
+
+shrinker:
+  remove_line_numbers: true
+  remove_source_file: true
+  remove_source_debug: true
+  remove_signature: true
+
+member_shuffler:
+  shuffle_fields: true
+  shuffle_methods: true
+
+#instruction_set_reducer: true
+
+compression_level: 9
+
+dictionary: "$DARGEN"
+
+randomized_string_length: 7
+
+exclusions:
+  - "string_encryption: ru/starfarm/client/discord.*"
+
+#  - "flow_obfuscation: ru/starfarm/client/mixin.*"
+
+  - "renamer: ru/starfarm/client/api.*"
+  - "renamer: ru/starfarm/client/mixin.*"
+  - "renamer: ru/starfarm/client/discord.*"
+  - "renamer: ru/starfarm/client/StarClient"
+  - "renamer: org/spongepowered.*"
+
+  - "hide_code: org/spongepowered.*"

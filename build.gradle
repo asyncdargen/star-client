@@ -1,0 +1,105 @@
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'maven-publish'
+//apply plugin: 'ru.dargen.radon-plugin'
+
+allprojects {
+    apply plugin: 'java'
+
+    group 'ru.starfarm'
+    version '1.0.1'
+
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        maven { url = 'https://repo.starfarm.fun/public' }
+    }
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    }
+
+    tasks.withType(JavaCompile)*.options*.encoding = 'UTF-8'
+}
+
+java {
+    archivesBaseName = 'star-client'
+    toolchain.languageVersion = JavaLanguageVersion.of(8)
+}
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+}
+
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+
+    shade project(':api')
+    compileOnly project(':api')
+
+    shade 'ru.dargen:dbcl:1.0.0'
+    compileOnly 'ru.dargen:dbcl:1.0.0'
+
+    shade 'one.util:streamex:0.8.1'
+    compileOnly 'one.util:streamex:0.8.1'
+
+    shade 'org.spongepowered:mixin:0.8.3-SNAPSHOT'
+    compileOnly 'org.spongepowered:mixin:0.8.3-SNAPSHOT'
+    annotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
+    testAnnotationProcessor 'org.spongepowered:mixin:0.8.3-SNAPSHOT:processor'
+}
+
+publishing {
+    repositories {
+        maven {
+            url 'https://repo.starfarm.fun/public'
+            credentials {
+                username System.getenv('SF_REPO_USER')
+                password System.getenv('SF_REPO_PASSWORD')
+            }
+        }
+    }
+
+    publications {
+        version(MavenPublication) {
+            groupId project.group
+            artifactId 'star-client'
+            version project.version
+            artifact jar
+        }
+        live(MavenPublication) {
+            groupId project.group
+            artifactId 'star-client'
+            version 'live'
+            artifact jar
+        }
+    }
+}
+
+jar {
+    from configurations.shade.collect(project.&zipTree)
+
+    manifest {
+        attributes([
+                'TweakClass'                 : 'org.spongepowered.asm.launch.MixinTweaker',
+                'MixinConfigs'               : 'mixins.star-client.json',
+                'FMLCorePluginContainsFMLMod': 'true',
+                'ForceLoadAsMod'             : 'true',
+                'Build-Timestamp'            : new Date().format('yyyy-MM-dd HH:mm:ssZ')
+        ])
+    }
+
+    exclude('META-INF/maven/**')
+    exclude('META-INF/versions/**')
+
+    archiveFileName = 'star-client.jar'
+}
+
+jar.finalizedBy('reobfJar')

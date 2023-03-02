@@ -1,0 +1,40 @@
+plugins {
+    id "maven-publish"
+}
+
+group = "ru.starfarm"
+
+dependencies {
+    compileOnly 'io.netty:netty-all:4.1.82.Final'
+}
+
+publishing {
+    repositories {
+        maven {
+            url "https://repo.starfarm.fun/private"
+            credentials {
+                username System.getenv("SF_REPO_USER")
+                password System.getenv("SF_REPO_PASSWORD")
+            }
+        }
+    }
+
+    publications {
+        live(MavenPublication) {
+            groupId project.group
+            artifactId "client-api"
+            version "live"
+            artifact jar
+        }
+        version(MavenPublication) {
+            groupId project.group
+            artifactId "client-api"
+            version project.version
+            artifact jar
+        }
+    }
+}
+
+compileJava {
+    options.compilerArgs << "-parameters"
+}
